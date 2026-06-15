@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    /* No global smooth-scroll: it can animate the page downward when async
+       content (3D model, iframe) loads below the fold on first paint. */
+    scroll-behavior: auto;
+    /* Disable scroll anchoring so late layout shifts below the fold don't
+       drag the viewport down to them on load. */
+    overflow-anchor: none;
+  }
+
+  body {
+    @apply bg-void text-mist antialiased;
+    overflow-anchor: none;
+  }
+
+  ::selection {
+    @apply bg-electric text-void;
+  }
+
+  /* Visible keyboard focus, everywhere */
+  :focus-visible {
+    @apply outline-none ring-2 ring-electric ring-offset-2 ring-offset-void;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Mono eyebrow label used above headings */
+  .eyebrow {
+    @apply font-mono text-xs uppercase tracking-[0.2em] text-electric;
+  }
+
+  /* Gradient text — electric → violet */
+  .text-gradient {
+    @apply bg-electric-violet bg-clip-text text-transparent;
+  }
+
+  /* Film grain — fixed overlay, very low opacity, purely atmospheric */
+  .grain {
+    @apply pointer-events-none fixed inset-0 z-[60] opacity-[0.04];
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
