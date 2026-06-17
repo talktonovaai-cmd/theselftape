@@ -121,9 +121,9 @@ export const PRICING: Record<
     title: 'Session packs',
     blurb: 'For actors who tape every week. Packs apply to 30-minute sessions.',
     lines: [
-      { label: '5-pack', price: '$200', note: 'Save $50' },
+      { label: '5-pack', price: '$225', note: 'Save $25' },
       { label: '10-pack', price: '$400', note: 'Save $100' },
-      { label: 'Unlimited month', price: '$700', note: 'Episodic-season insurance' },
+      { label: 'Unlimited month', price: '$999', note: '1 30-minute tape/day' },
     ],
   },
   demoReels: {

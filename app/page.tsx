@@ -66,6 +66,7 @@ export default function HomePage() {
           'Digishot',
           'Est. 2008',
           'Reader Included',
+          'Teleprompter',
           'Sherman Oaks',
           'The Original',
         ]}
