@@ -1,0 +1,6 @@
+{
+  "headers": [
+    { "source": "/digishot-1062.glb",  "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }] },
+    { "source": "/digishot-1062.usdz", "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }] }
+  ]
+}
