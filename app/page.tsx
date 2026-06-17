@@ -311,8 +311,8 @@ export default function HomePage() {
               Full price list &#8594;
             </Link>
           </div>
-          <dl className="mt-10 grid gap-5 sm:grid-cols-3">
-            {PRICING.selfTapes.lines.map((line) => (
+          <dl className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {[...PRICING.selfTapes.lines, ...PRICING.packs.lines].map((line) => (
               <SpotlightCard key={line.label} className="bg-void">
                 <div className="p-6">
                   <dt className="text-sm text-slate">{line.label}</dt>
