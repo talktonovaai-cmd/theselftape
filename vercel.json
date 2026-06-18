@@ -4,6 +4,7 @@
     { "source": "/digishot-1062.usdz", "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }] },
     { "source": "/1042.glb", "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }] },
     { "source": "/1241.glb", "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }] },
+    { "source": "/1052.glb", "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }] },
     { "source": "/1209.glb", "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }] }
   ]
 }
