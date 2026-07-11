@@ -6,6 +6,7 @@ import JsonLd from '@/components/JsonLd';
 import Hud from '@/components/Hud';
 import Aurora from '@/components/Aurora';
 import CameraRig from '@/components/CameraRig';
+import VisitorAlert from '@/components/VisitorAlert';
 import { BUSINESS } from '@/lib/business';
 import './globals.css';
 
@@ -69,6 +70,7 @@ export default function RootLayout({
           Skip to content
         </a>
         <JsonLd />
+        <VisitorAlert />
         <Hud />
         <Aurora />
         <CameraRig />
