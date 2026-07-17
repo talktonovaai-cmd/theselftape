@@ -6,14 +6,17 @@ import { motion, useReducedMotion } from 'framer-motion';
 /**
  * A phone mockup for the selftape.ai section.
  *
- * It shows an on-brand "app preview" card by default (always looks intentional),
- * and ATTEMPTS to load the live selftape.ai inside the screen as a progressive
- * enhancement. If the live app is frameable (selftape.ai must allow
- * theselftape.com as a frame-ancestor -- see README), the real app fades in
- * over the preview. If it's blocked, the preview simply stays -- never a blank
- * box.
+ * Shows an on-brand "app preview" card by default (always looks intentional).
+ * It ALSO attempts to load the live selftape.ai inside the screen as a
+ * progressive enhancement. The live app is only ever revealed if it genuinely
+ * frames successfully; if selftape.ai refuses to be embedded (X-Frame-Options
+ * / missing frame-ancestors), the browser's "refused to connect" error is kept
+ * hidden underneath the preview card and the user only ever sees the clean card.
  *
- * The iframe is given no scroll influence over the parent page.
+ * To make the REAL app appear here, selftape.ai must send a header allowing:
+ *   Content-Security-Policy: frame-ancestors 'self'
+ *     https://shermanoaksselftape.com https://www.shermanoaksselftape.com
+ *   (and remove X-Frame-Options: DENY/SAMEORIGIN)
  */
 export default function PhoneFrame({
   src,
@@ -27,9 +30,8 @@ export default function PhoneFrame({
   const [liveReady, setLiveReady] = useState(false);
   const [tryLive, setTryLive] = useState(false);
 
-  // Only attempt the live embed after the user has actually scrolled into the
-  // section -- never on initial paint, so a cross-origin frame can't pull the
-  // page down to itself on load.
+  // Only attempt the live embed after the user has actually scrolled -- never
+  // on initial paint, so a cross-origin frame can't pull the page to itself.
   useEffect(() => {
     const onFirstScroll = () => {
       setTryLive(true);
@@ -39,21 +41,25 @@ export default function PhoneFrame({
     return () => window.removeEventListener('scroll', onFirstScroll);
   }, []);
 
-  // Consider the live app "ready" only if the iframe actually renders content.
-  // Cross-origin frames that are blocked will never reach a usable state, so we
-  // confirm via a load event AND a short settle delay before revealing it.
+  // A blocked cross-origin frame still fires `load` (on the browser's error
+  // page), so `load` alone can't be trusted. We probe: on a SUCCESSFULLY framed
+  // cross-origin app, reading contentWindow.location.href throws a SecurityError
+  // -- that's our signal the real app is there. A same-origin browser error
+  // page does NOT throw, so it stays hidden. We also require the frame to still
+  // be present a beat later, to avoid flashing an error page.
   function handleLoad() {
-    // Give the framed app a beat to paint; if it was an error/blocked page the
-    // browser may still fire load, so we keep the preview unless we can confirm.
+    let crossOrigin = false;
     try {
-      // Accessing contentWindow.location.href throws on a successfully framed
-      // cross-origin page (good) but the mere load of our own-origin error page
-      // would not. We treat a thrown SecurityError as "real app is there."
-      const href = iframeRef.current?.contentWindow?.location.href;
-      if (href === undefined) setLiveReady(true);
+      // Throws (SecurityError) => real cross-origin app loaded. Good.
+      void iframeRef.current?.contentWindow?.location.href;
+      // No throw => same-origin (our error page). Keep it hidden.
+      crossOrigin = false;
     } catch {
-      // SecurityError -> cross-origin app really loaded inside the frame.
-      setLiveReady(true);
+      crossOrigin = true;
+    }
+    if (crossOrigin) {
+      // Small settle delay so we never flash a half-loaded frame.
+      setTimeout(() => setLiveReady(true), 400);
     }
   }
 
@@ -73,8 +79,10 @@ export default function PhoneFrame({
         {/* notch */}
         <div className="absolute left-1/2 top-0 z-30 h-6 w-32 -translate-x-1/2 rounded-b-2xl bg-void" />
 
-        {/* live app -- sits BELOW the preview until it genuinely frames, then
-            rises above it. Rendered first so it's underneath in stacking. */}
+        {/* live app -- stays BELOW the preview (z-0, transparent) until it is
+            CONFIRMED to have framed successfully, then rises above (z-20). If
+            selftape.ai refuses to be embedded, the browser error page renders
+            here but stays hidden under the preview card forever. */}
         {tryLive && (
           <iframe
             ref={iframeRef}
@@ -93,9 +101,9 @@ export default function PhoneFrame({
           />
         )}
 
-        {/* on-brand preview -- sits above the not-ready iframe (z-10) so its
-            button is always tappable. The live iframe (z-20) covers it only
-            once the real app is confirmed loaded. */}
+        {/* on-brand preview -- ALWAYS visible above the not-ready iframe (z-10),
+            so its button is always tappable and no error page ever shows. The
+            live iframe (z-20) covers it only once the real app is confirmed. */}
         <div className="absolute inset-0 z-10 flex flex-col bg-gradient-to-b from-panel2 to-void">
           <div className="flex items-center gap-2 px-5 pt-10">
             <span className="h-2 w-2 rounded-full bg-cyan motion-safe:animate-pulseGlow" />
