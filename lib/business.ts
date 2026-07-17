@@ -10,7 +10,7 @@ export const BUSINESS = {
   name: 'The Selftape',
   legalName: 'The Self Tape, LLC',
   tagline: 'The original self-tape studio in Los Angeles',
-  url: 'https://www.theselftape.com',
+  url: 'https://www.shermanoaksselftape.com',
   founded: '2008',
   founder: 'Jason Montgomery',
 
@@ -85,7 +85,7 @@ export const BUSINESS = {
   // The funnel. TODO: confirm final production URL + UTM params.
   app: {
     name: 'selftape.ai',
-    url: 'https://www.selftape.ai?utm_source=theselftape&utm_medium=site&utm_campaign=funnel',
+    url: 'https://www.selftape.ai?utm_source=shermanoaksselftape&utm_medium=site&utm_campaign=funnel',
     embedUrl: 'https://www.selftape.ai',
   },
 
