@@ -23,6 +23,7 @@ export async function POST(request: Request) {
         allowedContentTypes: ['video/webm', 'video/mp4', 'video/quicktime', 'video/x-m4v'],
         addRandomSuffix: true,
       }),
+      onUploadCompleted: async () => undefined,
     });
     return NextResponse.json(json);
   } catch (error) {
