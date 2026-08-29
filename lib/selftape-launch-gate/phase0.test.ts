@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { POST as previewPost } from '../../app/api/elevenlabs/preview/route';
+import { POST as ocrPost } from '../../app/api/ocr-script/route';
 import { POST as personaplexPost } from '../../app/api/personaplex/session/route';
 import { POST as promoPost } from '../../app/api/promo/redeem/route';
 import { POST as ttsPost } from '../../app/api/text-to-speech/route';
@@ -24,6 +25,7 @@ describe('Phase 0 auth-first gates', () => {
     { path: '/api/personaplex/session', post: personaplexPost, body: {} },
     { path: '/api/video/client-upload', post: uploadPost, body: {} },
     { path: '/api/promo/redeem', post: promoPost, body: {} },
+    { path: '/api/ocr-script', post: ocrPost, body: {} },
   ] as const;
 
   for (const route of routes) {
